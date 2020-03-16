@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GuardCheck</string>
+    <string name="local_service_started">Local Service Started...</string>
+    <string name="local_service_stopped">Local Service Stopped...</string>
+    <string name="notification_title">Routine Check !</string>
+    <string name="notification_text">Pending routine check in 2 minutes...</string>
+</resources>
