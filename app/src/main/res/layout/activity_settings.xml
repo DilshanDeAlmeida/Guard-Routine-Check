@@ -7,6 +7,22 @@
     android:orientation="vertical"
     tools:context=".SettingsActivity">
 
+    <ImageButton
+        android:id="@+id/btnSaveToDB"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="395dp"
+        android:layout_marginBottom="44dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.107"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/disk" />
+
     <TextView
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
@@ -62,7 +78,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/btnPhone"
+        app:layout_constraintStart_toEndOf="@+id/btnViewHistory"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
         app:layout_constraintVertical_bias="0.601" />
 
@@ -87,7 +103,7 @@
         app:layout_constraintVertical_bias="0.239" />
 
     <ImageButton
-        android:id="@+id/btnPhone"
+        android:id="@+id/btnViewHistory"
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:layout_alignParentStart="true"
@@ -103,22 +119,6 @@
         app:srcCompat="@drawable/calender" />
 
     <ImageButton
-        android:id="@+id/btnSaveToDB"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="395dp"
-        android:layout_marginBottom="44dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.107"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/disk" />
-
-    <ImageButton
         android:id="@+id/btnLocations"
         android:layout_width="128dp"
         android:layout_height="128dp"
@@ -129,7 +129,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/btnPhone"
+        app:layout_constraintBottom_toTopOf="@+id/btnViewHistory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="parent"
@@ -145,5 +145,5 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:text="Do it"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 </RelativeLayout>

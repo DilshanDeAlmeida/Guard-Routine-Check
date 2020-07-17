@@ -8,10 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -104,7 +105,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_LOCNAME, curLocation);
         values.put(KEY_GUARD_NAME, guardName);
         values.put(KEY_REMARKS, remarks);
-        values.put(KEY_CREATED_AT, DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(currentTime));
+        values.put(KEY_CREATED_AT, getDateTime());
+        //values.put(KEY_CREATED_AT, DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(currentTime));
 
         // insert row
         long history_id = db.insert(TABLE_CHECK_HISTORY, null, values);
@@ -216,6 +218,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return history;
     }
 
+    public ArrayList<History> getGuardHistory(String FromDate, String ToDate) {
+
+        String concat = "null";
+        ArrayList<History> history = new ArrayList<History>();
+        String Date;
+        String Location;
+        String Remark;
+        String Guard;
+
+        //String selectQuery = "SELECT * FROM " + TABLE_CHECK_HISTORY + " WHERE " + KEY_CREATED_AT + " BETWEEN " + "'" + FromDate + " 17:00:00" + "'" + " AND " + "'" + ToDate + " 07:00:00" + "' ORDER BY " + KEY_ID + " DESC LIMIT 380;";
+        String selectQuery = "SELECT * FROM " + TABLE_CHECK_HISTORY + " WHERE " + KEY_CREATED_AT + " BETWEEN " + "'" + FromDate + " 17:00:00" + "'" + " AND " + "'" + ToDate + " 07:00:00" + "' ORDER BY " + KEY_ID + " DESC LIMIT 380;";
+
+        Log.e(LOG, selectQuery);
+        History hobj;
+
+        Log.d("Test", selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                // adding to todo list
+                if (!c.getString(c.getColumnIndex(KEY_REMARKS)).equals("")) {
+
+                    Date = c.getString(c.getColumnIndex(KEY_CREATED_AT));
+                    Location = c.getString(c.getColumnIndex(KEY_LOCNAME));
+                    Remark = c.getString(c.getColumnIndex(KEY_REMARKS));
+                    Guard = c.getString(c.getColumnIndex(KEY_GUARD_NAME));
+                    hobj = new History(Date, Location, Remark, Guard);
+                    history.add(hobj);
+
+                } else {
+
+                    Date = c.getString(c.getColumnIndex(KEY_CREATED_AT));
+                    Location = c.getString(c.getColumnIndex(KEY_LOCNAME));
+                    Remark = "No Remark";
+                    Guard = c.getString(c.getColumnIndex(KEY_GUARD_NAME));
+                    hobj = new History(Date, Location, Remark, Guard);
+                    history.add(hobj);
+
+                }
+            } while (c.moveToNext());
+        }
+        return history;
+    }
+
     public String getWaitTime(String location) {
 
         String result = "15";
@@ -238,6 +286,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
         }
         return result;
+    }
+
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+    public void ClearHistoryFromPhoneDatabase() {
+        String deleteQuery = "DROP TABLE IF EXISTS " + TABLE_CHECK_HISTORY;
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL(deleteQuery);
     }
 
     // closing database

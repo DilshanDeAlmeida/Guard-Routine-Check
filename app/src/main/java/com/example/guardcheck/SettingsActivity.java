@@ -1,14 +1,11 @@
 package com.example.guardcheck;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     ImageButton btnLocations;
-    ImageButton btnPhone;
+    ImageButton btnHistoryView;
     ImageButton btnSaveToDB;
     Button btnAlarmdo;
     private NotificationManager mNotificationManager;
@@ -40,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         btnLocations = findViewById(R.id.btnLocations);
-        btnPhone = findViewById(R.id.btnPhone);
+        btnHistoryView = findViewById(R.id.btnViewHistory);
         btnSaveToDB = findViewById(R.id.btnSaveToDB);
         btnAlarmdo = findViewById(R.id.btnDoIt);
 
@@ -51,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        btnPhone.setOnClickListener(new View.OnClickListener() {
+        btnHistoryView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingsActivity.this, ViewHistoryActivity.class));
@@ -78,6 +75,11 @@ public class SettingsActivity extends AppCompatActivity {
                             dst.transferFrom(src, 0, src.size());
                             src.close();
                             dst.close();
+
+                            // This line of code will clear the previous Check History after backing up
+                            //DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+                            //dbHelper.ClearHistoryFromPhoneDatabase();
+
                             Toast.makeText(getApplicationContext(), "Backup Success", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -102,8 +104,6 @@ public class SettingsActivity extends AppCompatActivity {
 //                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 //                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmManager.INTERVAL_DAY, pendingIntent);
 //                      }
-
-                    //===========================================================================================================================================
 
                     mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                     final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -135,7 +135,7 @@ public class SettingsActivity extends AppCompatActivity {
                         mNotificationManager.cancelAll();
                     }
 
-                    Toast.makeText(getApplicationContext(), "The Lords' work is DONE ... !", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "The Lords work is DONE ... !", Toast.LENGTH_LONG).show();
                 } catch (Exception exception) {
                     Toast.makeText(getApplicationContext(), "Error :" + exception.getMessage(), Toast.LENGTH_LONG).show();
                 }
