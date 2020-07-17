@@ -54,30 +54,47 @@ public class JavaMailAPI extends AsyncTask<Void, Void, Void> {
         try {
 
             Properties props = new Properties();
+
+            // Using Port 465
             props.put("mail.smtp.host", "smtp.gmail.com");
             props.put("mail.smtp.port", "465");
             props.put("mail.smtp.socketFactory.port", "465");
             props.put("mail.smtp.auth", "true");
-            //props.put("mail.smtp.starttls.enable","true");
             props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             props.put("mail.smtp.socketFactory.fallback", "false");
+            props.put("mail.user", Credentials.EMAIL);
 
-            session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+            // Using Port 587
+//            props.put("mail.smtp.host", "smtp.gmail.com");
+//            props.put("mail.smtp.port", "587");
+//            props.put("mail.smtp.auth", "true");
+//            props.put("mail.smtp.starttls.enable", "true");
+//            props.put("mail.user", Credentials.EMAIL);
+
+            //mail.3slk.com
+//            props.put("mail.smtp.host", "mail.3slk.com");
+//            props.put("mail.smtp.ssl.trust", "*");
+//            props.put("mail.smtp.port", "587");
+//            props.put("mail.smtp.auth", "true");
+//            props.put("mail.smtp.starttls.enable", "true");
+//            props.put("mail.user", Credentials.EMAIL);
+
+            session = Session.getInstance(props, new javax.mail.Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(Credentials.EMAIL, Credentials.PASSWORD);
                 }
             });
-            Log.d("Test", "JavaMailAPI: Authentication completed...");
+
             MimeMessage mm = new MimeMessage(session);
             mm.setFrom(new InternetAddress(Credentials.EMAIL));
             mm.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             mm.setSubject(subject);
             mm.setText(message);
-            Log.d("Test", "JavaMailAPI: Message added to MimeMessage...");
+
             Transport.send(mm);
 
         } catch (MessagingException e) {
-            Log.d("Test", "JavaMailAPI: "+ e.getMessage());
+            Log.d("Test", e.getMessage());
             e.printStackTrace();
         }
         return null;

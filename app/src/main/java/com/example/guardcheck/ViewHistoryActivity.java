@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +22,7 @@ public class ViewHistoryActivity extends AppCompatActivity implements DatePicker
     DatabaseHelper db;
     String fromDate = "";
     String toDate = "";
+    String tripStartTimes = "";
 
     Button btnViewDayHistory;
     Button btnEmailLog;
@@ -43,11 +45,10 @@ public class ViewHistoryActivity extends AppCompatActivity implements DatePicker
 
         listViewHistory = findViewById(R.id.listViewHistory);
         db = new DatabaseHelper(getApplicationContext());
-        historyList = db.getGuardHistory();
-        Log.d("Test", historyList.toString());
 
-        HistoryListAdapter adapter = new HistoryListAdapter(this, R.layout.adapter_view_layout, historyList);
-        listViewHistory.setAdapter(adapter);
+//        historyList = db.getGuardHistory();
+//        HistoryListAdapter adapter = new HistoryListAdapter(this, R.layout.adapter_view_layout, historyList);
+//        listViewHistory.setAdapter(adapter);
 
         btnDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,28 +66,47 @@ public class ViewHistoryActivity extends AppCompatActivity implements DatePicker
                 listViewHistory.setAdapter(null);
                 HistoryListAdapter adapter = new HistoryListAdapter(getApplicationContext(), R.layout.adapter_view_layout, historyList);
                 listViewHistory.setAdapter(adapter);
-
                 CalculateCompletedTrips(historyList);
+                tripStartTimes = GetTripStartTimes(historyList);
             }
         });
 
         btnEmailLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    String emailTo = "dilshandealmeida2@gmail.com";
-                    String emailSubject = "3S Guard Check App Report" + fromDate + " to " + toDate;
-                    String emailMessage = "No of completed trips : " + txtCompTripCount.getText() + '\n' + "No of incomplete trips : " + txtIncompTripCount.getText() + '\n' + "Total no of trips : " + txtTotTripCount.getText() + '\n';
+                if (historyList.isEmpty() == false) {
+                    try {
+                        String emailTo = "dilshan@3slk.com";
+                        String emailSubject = "3S Guard Check App Report " + fromDate + " to " + toDate;
+                        String emailMessage = "\n" + "Report " + fromDate + " to " + toDate + "\n" + "\n" + "No of completed trips : " + txtCompTripCount.getText() + '\n' + "No of incomplete trips : " + txtIncompTripCount.getText() + '\n' + "Total no of trips : " + txtTotTripCount.getText() + '\n' + '\n' + tripStartTimes;
 
-                    JavaMailAPI javamailAPI = new JavaMailAPI(ViewHistoryActivity.this, emailTo, emailSubject, emailMessage);
-                    Log.d("Test", "\n" + emailTo + "\n" + emailSubject + "\n" + emailMessage);
-                    javamailAPI.execute();
-                    Log.d("Test", "Email sent...");
-                } catch (Exception e) {
-                    Log.d("Test", "View History Activity: " + e.getMessage());
+                        JavaMailAPI javamailAPI = new JavaMailAPI(ViewHistoryActivity.this, emailTo, emailSubject, emailMessage);
+                        Log.d("Test", "\n" + emailTo + "\n" + emailSubject + "\n" + emailMessage);
+                        javamailAPI.execute();
+                        Log.d("Test", "Email sent...");
+                    } catch (Exception e) {
+                        Log.d("Test", "View History Activity: " + e.getMessage());
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "No history to email", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    private String GetTripStartTimes(ArrayList<History> historyList) {
+        if (historyList.isEmpty() == false) {
+            String curLocation = "null";
+
+            for (int i = 0; i < historyList.size(); i++) {
+                curLocation = historyList.get(i).getLocation();
+                if (curLocation.equals("Location01")) {
+                    tripStartTimes += "\n" + historyList.get(i).getDate();
+                }
+            }
+        }
+        Log.d("Test", tripStartTimes);
+        return tripStartTimes;
     }
 
     private void showDatePickerDialog() {

@@ -227,7 +227,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String Remark;
         String Guard;
 
-        String selectQuery = "SELECT * FROM " + TABLE_CHECK_HISTORY + " WHERE " + KEY_CREATED_AT + " BETWEEN " + "'" + FromDate + " 17:00:00" + "'" + " AND " + "'" + ToDate + " 07:00:00" + "' ORDER BY " + KEY_ID + " DESC LIMIT 380;";
+        String selectQuery = "SELECT * FROM " + TABLE_CHECK_HISTORY + " WHERE " + KEY_CREATED_AT + " BETWEEN " + "'" + FromDate + " 17:00:00" + "'" + " AND " + "'" + ToDate + " 07:00:00" + "' ORDER BY " + KEY_ID + " ASC;";
 
         Log.e(LOG, selectQuery);
         History hobj;
