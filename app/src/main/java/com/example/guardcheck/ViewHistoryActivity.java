@@ -76,7 +76,7 @@ public class ViewHistoryActivity extends AppCompatActivity implements DatePicker
             public void onClick(View v) {
                 if (historyList.isEmpty() == false) {
                     try {
-                        String emailTo = "dilshan@3slk.com";
+                        String emailTo = "charith@3slk.com";
                         String emailSubject = "3S Guard Check App Report " + fromDate + " to " + toDate;
                         String emailMessage = "\n" + "Report " + fromDate + " to " + toDate + "\n" + "\n" + "No of completed trips : " + txtCompTripCount.getText() + '\n' + "No of incomplete trips : " + txtIncompTripCount.getText() + '\n' + "Total no of trips : " + txtTotTripCount.getText() + '\n' + '\n' + tripStartTimes;
 
