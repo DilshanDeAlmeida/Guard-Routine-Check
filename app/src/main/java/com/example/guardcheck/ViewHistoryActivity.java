@@ -75,22 +75,15 @@ public class ViewHistoryActivity extends AppCompatActivity implements DatePicker
             public void onClick(View v) {
                 try {
                     String emailTo = "dilshandealmeida2@gmail.com";
-                    String emailSubject="3S Guard Check App Report" + fromDate + " to " + toDate;
-                    String emailMessage =
-                            "No of completed trips : " + txtCompTripCount.getText() + '\n' +
-                            "No of incomplete trips : " + txtIncompTripCount.getText() + '\n' +
-                            "Total no of trips : " + txtTotTripCount.getText() + '\n';
+                    String emailSubject = "3S Guard Check App Report" + fromDate + " to " + toDate;
+                    String emailMessage = "No of completed trips : " + txtCompTripCount.getText() + '\n' + "No of incomplete trips : " + txtIncompTripCount.getText() + '\n' + "Total no of trips : " + txtTotTripCount.getText() + '\n';
 
-//                    GMailSender sender = new GMailSender("3sfabltd@gmail.com", "1586115861");
-//                    sender.sendMail(emailSubject, emailMessage, "3sfabltd@gmail.com", emailTo);
-
-                    JavaMailAPI javamailAPI = new JavaMailAPI(ViewHistoryActivity.this,emailTo,emailSubject,emailMessage);
-                    Log.d("Test","javamailAPI object created..." );
-                    Log.d("Test",emailTo+"\n"+emailSubject+"\n"+emailMessage );
+                    JavaMailAPI javamailAPI = new JavaMailAPI(ViewHistoryActivity.this, emailTo, emailSubject, emailMessage);
+                    Log.d("Test", "\n" + emailTo + "\n" + emailSubject + "\n" + emailMessage);
                     javamailAPI.execute();
                     Log.d("Test", "Email sent...");
                 } catch (Exception e) {
-                    Log.d("Test", e.getMessage());
+                    Log.d("Test", "View History Activity: " + e.getMessage());
                 }
             }
         });

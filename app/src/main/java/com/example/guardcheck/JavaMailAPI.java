@@ -25,14 +25,15 @@ public class JavaMailAPI extends AsyncTask<Void, Void, Void> {
     private String message;
     private ProgressDialog progressDialog;
 
+    static {
+        Security.addProvider(new JSSEProvider());
+    }
+
     public JavaMailAPI(Context context, String email, String subject, String message) {
         this.context = context;
         this.email = email;
         this.subject = subject;
         this.message = message;
-    }
-    static {
-        Security.addProvider(new JSSEProvider());
     }
 
     @Override
@@ -66,16 +67,17 @@ public class JavaMailAPI extends AsyncTask<Void, Void, Void> {
                     return new PasswordAuthentication(Credentials.EMAIL, Credentials.PASSWORD);
                 }
             });
-
+            Log.d("Test", "JavaMailAPI: Authentication completed...");
             MimeMessage mm = new MimeMessage(session);
             mm.setFrom(new InternetAddress(Credentials.EMAIL));
             mm.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             mm.setSubject(subject);
             mm.setText(message);
+            Log.d("Test", "JavaMailAPI: Message added to MimeMessage...");
             Transport.send(mm);
 
         } catch (MessagingException e) {
-            Log.d("Test", e.getMessage());
+            Log.d("Test", "JavaMailAPI: "+ e.getMessage());
             e.printStackTrace();
         }
         return null;
