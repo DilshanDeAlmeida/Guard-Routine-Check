@@ -74,6 +74,7 @@ public class ViewHistoryActivity extends AppCompatActivity implements DatePicker
         btnEmailLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (historyList.isEmpty() == false) {
                     try {
                         String emailTo = "charith@3slk.com";
