@@ -1,9 +1,12 @@
 package com.example.guardcheck;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +32,6 @@ public class SettingsActivity extends AppCompatActivity {
     ImageButton btnHistoryView;
     ImageButton btnSaveToDB;
     Button btnAlarmdo;
-    private NotificationManager mNotificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnHistoryView = findViewById(R.id.btnViewHistory);
         btnSaveToDB = findViewById(R.id.btnSaveToDB);
         btnAlarmdo = findViewById(R.id.btnDoIt);
+
 
         btnLocations.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,107 +95,8 @@ public class SettingsActivity extends AppCompatActivity {
         btnAlarmdo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-
-//                    ArrayList<Calendar> notifyHrs = new ArrayList<Calendar>();
-//                    notifyHrs = getAlarmTimes();
-//
-//                    for (Calendar calendar : notifyHrs) {
-//                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmManager.INTERVAL_DAY, pendingIntent);
-//                      }
-
-                    mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                    final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-                    //Set up the Notification Broadcast Intent
-                    Intent notifyIntent = new Intent(getApplicationContext(), SMSmessenger.class);
-
-                    //Check if the Alarm is already set, and check the toggle accordingly
-                    boolean alarmUp = (PendingIntent.getBroadcast(getApplicationContext(), 0, notifyIntent, PendingIntent.FLAG_NO_CREATE) != null);
-
-                    //Set up the PendingIntent for the AlarmManager
-                    final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    if (!alarmUp) {
-
-                        Log.d("Test", alarmUp + " : Reached Here..");
-                        long triggerTime = SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-
-                        long repeatInterval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-
-                        //If the Toggle is turned on, set the repeating alarm with a 15 minute interval
-                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, notifyPendingIntent);
-
-                    } else {
-
-                        Log.d("Test", alarmUp + " : Reached Here.. [-Cancel]");
-                        //Cancel the alarm and notification if the alarm is turned off
-                        alarmManager.cancel(notifyPendingIntent);
-                        mNotificationManager.cancelAll();
-                    }
-
-                    Toast.makeText(getApplicationContext(), "The Lords work is DONE ... !", Toast.LENGTH_LONG).show();
-                } catch (Exception exception) {
-                    Toast.makeText(getApplicationContext(), "Error :" + exception.getMessage(), Toast.LENGTH_LONG).show();
-                }
+                // Do Nothing ...
             }
         });
-
-    }
-
-    private ArrayList<Calendar> getAlarmTimes() {
-        ArrayList<Calendar> notifyHrs = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 05);
-        notifyHrs.add(calendar);
-        Log.d("Test", notifyHrs.get(0).toString());
-
-//        calendar.set(Calendar.HOUR_OF_DAY, 18);
-//        calendar.set(Calendar.MINUTE, 58);
-//        notifyHrs.add(calendar);
-//        Log.d("Test", notifyHrs.get(0).toString());
-//
-//        calendar.set(Calendar.HOUR_OF_DAY, 20);
-//        calendar.set(Calendar.MINUTE, 28);
-//        notifyHrs.add(calendar);
-//        Log.d("Test", notifyHrs.get(1).toString());
-//
-//        calendar.set(Calendar.HOUR_OF_DAY, 21);
-//        calendar.set(Calendar.MINUTE, 58);
-//        notifyHrs.add(calendar);
-//        Log.d("Test", notifyHrs.get(2).toString());
-//
-//        calendar.set(Calendar.HOUR_OF_DAY, 23);
-//        calendar.set(Calendar.MINUTE, 28);
-//        notifyHrs.add(calendar);
-//        Log.d("Test", notifyHrs.get(3).toString());
-//
-//        calendar.set(Calendar.HOUR_OF_DAY, 00);
-//        calendar.set(Calendar.MINUTE, 58);
-//        notifyHrs.add(calendar);
-//        Log.d("Test", notifyHrs.get(4).toString());
-//
-//        calendar.set(Calendar.HOUR_OF_DAY, 02);
-//        calendar.set(Calendar.MINUTE, 28);
-//        notifyHrs.add(calendar);
-//        Log.d("Test", notifyHrs.get(5).toString());
-//
-//        calendar.set(Calendar.HOUR_OF_DAY, 03);
-//        calendar.set(Calendar.MINUTE, 58);
-//        notifyHrs.add(calendar);
-//        Log.d("Test", notifyHrs.get(6).toString());
-//
-//        calendar.set(Calendar.HOUR_OF_DAY, 05);
-//        calendar.set(Calendar.MINUTE, 28);
-//        notifyHrs.add(calendar);
-//        Log.d("Test", notifyHrs.get(7).toString());
-
-        return notifyHrs;
     }
 }

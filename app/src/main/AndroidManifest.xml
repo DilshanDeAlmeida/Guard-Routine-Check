@@ -36,6 +36,11 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
+        <receiver android:name=".SMSmessenger"/>
+        <service
+            android:name=".RSSPullService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
