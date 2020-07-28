@@ -37,6 +37,7 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
         <receiver android:name=".SMSmessenger"/>
+        <receiver android:name=".SendAutomaticReport"/>
         <service android:name=".RSSPullService"/>
 
     </application>

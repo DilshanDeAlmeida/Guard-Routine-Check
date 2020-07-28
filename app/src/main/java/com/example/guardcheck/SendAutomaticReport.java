@@ -46,8 +46,8 @@ public class SendAutomaticReport extends BroadcastReceiver  {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String formattedFromDate = df.format(c);
 
-        fromDate = formattedFromDate;
-        toDate = getPreviousDate(formattedFromDate);
+        fromDate = getPreviousDate(formattedFromDate);
+        toDate = formattedFromDate;
         Log.d("Test", "View log from " + fromDate + " to " + toDate);
     }
 
@@ -127,7 +127,7 @@ public class SendAutomaticReport extends BroadcastReceiver  {
 
         if (historyList.isEmpty() == false) {
             try {
-                String emailTo = "dilshandealmeida2@gmail.com";
+                String emailTo = "charith@3slk.com";
                 String emailSubject = "3S Guard Check App Report " + fromDate + " to " + toDate;
                 String emailMessage =
                         "\n" + "Report " + fromDate + " to " + toDate +
@@ -140,7 +140,7 @@ public class SendAutomaticReport extends BroadcastReceiver  {
                 javamailAPI.execute();
                 Log.d("Test", "Email sent...");
             } catch (Exception e) {
-                Log.d("Test", "View History Activity: " + e.getMessage());
+                Log.d("Test", e.getMessage());
             }
         } else {
             Toast.makeText(context, "No history to email", Toast.LENGTH_LONG).show();

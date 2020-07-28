@@ -105,10 +105,14 @@ public class RSSPullService extends Service {
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("Test", " Reached Here..");
         CreateNotificationChannel();
+        Log.d("Test", " Reached Here..");
         SetNotificationTrigger();
+        Log.d("Test", " Reached Here..");
         SetReportSendTrigger();
-        return START_STICKY;
+        Log.d("Test", " Reached Here..");
+        return START_NOT_STICKY;
     }
 
 

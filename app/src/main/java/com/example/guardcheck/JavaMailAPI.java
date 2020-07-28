@@ -39,7 +39,7 @@ public class JavaMailAPI extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = ProgressDialog.show(context, "Sending message", "Please wait...", false, false);
+        //progressDialog = ProgressDialog.show(context, "Sending message", "Please wait...", false, false);
     }
 
     @Override
