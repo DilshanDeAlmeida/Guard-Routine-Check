@@ -77,13 +77,21 @@ public class ViewHistoryActivity extends AppCompatActivity implements DatePicker
 
                 if (historyList.isEmpty() == false) {
                     try {
-                        String emailTo = "charith@3slk.com";
-                        String emailSubject = "3S Guard Check App Report " + fromDate + " to " + toDate;
-                        String emailMessage = "\n" + "Report " + fromDate + " to " + toDate + "\n" + "\n" + "No of completed trips : " + txtCompTripCount.getText() + '\n' + "No of incomplete trips : " + txtIncompTripCount.getText() + '\n' + "Total no of trips : " + txtTotTripCount.getText() + '\n' + '\n' + tripStartTimes;
+                        ArrayList<String> emailList = new ArrayList<String>();
+                        emailList.add("dilshandealmeida2@gmail.com");
+                        emailList.add("dilshan@3slk.com");
 
-                        JavaMailAPI javamailAPI = new JavaMailAPI(ViewHistoryActivity.this, emailTo, emailSubject, emailMessage);
-                        Log.d("Test", "\n" + emailTo + "\n" + emailSubject + "\n" + emailMessage);
-                        javamailAPI.execute();
+                        for(int i=0;i<emailList.size();i++){
+
+                            String emailTo = emailList.get(i);
+                            String emailSubject = "3S Guard Check App Report " + fromDate + " to " + toDate;
+                            String emailMessage = "\n" + "Report " + fromDate + " to " + toDate + "\n" + "\n" + "No of completed trips : " + txtCompTripCount.getText() + '\n' + "No of incomplete trips : " + txtIncompTripCount.getText() + '\n' + "Total no of trips : " + txtTotTripCount.getText() + '\n' + '\n' + tripStartTimes;
+
+                            JavaMailAPI javamailAPI = new JavaMailAPI(ViewHistoryActivity.this, emailTo, emailSubject, emailMessage);
+                            Log.d("Test", "\n" + emailTo + "\n" + emailSubject + "\n" + emailMessage);
+                            javamailAPI.execute();
+
+                        }
                         Log.d("Test", "Email sent...");
                     } catch (Exception e) {
                         Log.d("Test", "View History Activity: " + e.getMessage());

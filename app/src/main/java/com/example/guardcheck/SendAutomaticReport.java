@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -32,10 +30,13 @@ public class SendAutomaticReport extends BroadcastReceiver  {
         this.context = context;
 
         db = new DatabaseHelper(context);
-
         SetDates();
-        GetDayHistoryRecords();
-        SendEmail();
+        if(CheckIfShouldSendEmail(toDate)==true){
+            GetDayHistoryRecords();
+            SendEmail();
+        }else{
+            Log.d("Test", "No need to send email...");
+        }
     }
 
     private void SetDates() {
@@ -126,24 +127,44 @@ public class SendAutomaticReport extends BroadcastReceiver  {
     private void SendEmail() {
 
         if (historyList.isEmpty() == false) {
-            try {
-                String emailTo = "charith@3slk.com";
-                String emailSubject = "3S Guard Check App Report " + fromDate + " to " + toDate;
-                String emailMessage =
-                        "\n" + "Report " + fromDate + " to " + toDate +
-                         "\n" + "\n" + "No of completed trips : " + txtCompTripCount +
-                         '\n' + "No of incomplete trips : " + txtIncompTripCount +
-                          '\n' + "Total no of trips : " + txtTotTripCount + '\n' + '\n' + tripStartTimes;
+            if(CheckIfShouldSendEmail(toDate)==true){
+                try {
 
-                JavaMailAPI javamailAPI = new JavaMailAPI(context, emailTo, emailSubject, emailMessage);
-                Log.d("Test", "\n" + emailTo + "\n" + emailSubject + "\n" + emailMessage);
-                javamailAPI.execute();
-                Log.d("Test", "Email sent...");
-            } catch (Exception e) {
-                Log.d("Test", e.getMessage());
+                    ArrayList<String> emailList = new ArrayList<String>();
+                    emailList.add("dilshandealmeida2@gmail.com");
+                    emailList.add("dilshan@3slk.com");
+
+                    for(int i=0;i<emailList.size();i++) {
+
+                        String emailTo = emailList.get(i);
+                        String emailSubject = "3S Guard Check App Report " + fromDate + " to " + toDate;
+                        String emailMessage = "\n" + "Report " + fromDate + " to " + toDate + "\n" + "\n" + "No of completed trips : " + txtCompTripCount + '\n' + "No of incomplete trips : " + txtIncompTripCount + '\n' + "Total no of trips : " + txtTotTripCount + '\n' + '\n' + tripStartTimes;
+
+                        JavaMailAPI javamailAPI = new JavaMailAPI(context, emailTo, emailSubject, emailMessage);
+                        Log.d("Test", "\n" + emailTo + "\n" + emailSubject + "\n" + emailMessage);
+                        javamailAPI.execute();
+
+                    }
+                    Log.d("Test", "Email sent...");
+                    if(db.addNewEmailSentRecord(toDate,1) == -1){
+                        Log.d("Test", "Failed to update Email Sent Log");
+                        Toast.makeText(context, "Failed to update Email Sent Log", Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (Exception e) {
+                    Log.d("Test", e.getMessage());
+                }
+            }else{
+                Log.d("Test", "No need to send email...");
             }
         } else {
             Toast.makeText(context, "No history to email", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private boolean CheckIfShouldSendEmail(String toDate) {
+        boolean result = db.getEmailSentStatus(toDate);
+        Log.d("Test", "getEmailSentStatus :"+result);
+        return result;
     }
 }

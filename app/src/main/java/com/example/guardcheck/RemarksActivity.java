@@ -205,7 +205,6 @@ public class RemarksActivity extends AppCompatActivity {
         ArrayList<String> emergencyNumbers = new ArrayList<>();
         emergencyNumbers.add("0771500224"); // Ranga
         emergencyNumbers.add("0772915832"); // Sithum
-        emergencyNumbers.add("0767768319"); // Nilantha
         emergencyNumbers.add("0777497571"); // Thusitha
         emergencyNumbers.add("0777293951"); // Sujith
         emergencyNumbers.add("0777565125"); // Charith

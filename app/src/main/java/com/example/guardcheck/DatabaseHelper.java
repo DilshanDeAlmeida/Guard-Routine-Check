@@ -28,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Table Names
     private static final String TABLE_LOCATIONS = "locations";
     private static final String TABLE_CHECK_HISTORY = "checkhistory";
+    private static final String TABLE_EMAILS_SENT = "emailssent";
 
     // Common column names
     private static final String KEY_ID = "sysID";
@@ -43,13 +44,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_GUARD_NAME = "guard_name";
     private static final String KEY_REMARKS = "remarks";
 
+    // checkhistory Table - column names
+    private static final String KEY_SENT_STATUS = "sent_status";
+
     // Table Create Statements
-    // Todo table create statement
+    // Todo table locations create statement
     private static final String CREATE_TABLE_LOCATIONS = "CREATE TABLE " + TABLE_LOCATIONS + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_LOCNAME + " TEXT," + KEY_LOCTIME + " INTEGER," + KEY_CREATED_AT + " DATETIME," + KEY_INDOOR + " TEXT," + KEY_FACILITY + " TEXT" + ")";
 
-    // Tag table create statement
+    // Todo table Check History create statement
     private static final String CREATE_TABLE_CHECK_HISTORY = "CREATE TABLE " + TABLE_CHECK_HISTORY + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_LOCNAME + " TEXT," + KEY_GUARD_NAME + " TEXT," + KEY_REMARKS + " TEXT," + KEY_CREATED_AT + " DATETIME" + ")";
 
+    // Todo table Emails Sent create statement
+    private static final String CREATE_TABLE_EMAILS_SENT = "CREATE TABLE " + TABLE_EMAILS_SENT + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_CREATED_AT + " DATETIME," + KEY_SENT_STATUS + " INTEGER" + ")";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -58,9 +64,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        Log.d("Test", "Database Helper class OnCreate Method START ...");
         // creating required tables
         db.execSQL(CREATE_TABLE_LOCATIONS);
         db.execSQL(CREATE_TABLE_CHECK_HISTORY);
+        db.execSQL(CREATE_TABLE_EMAILS_SENT);
+        Log.d("Test", "Database Helper class OnCreate Method END ...");
     }
 
     @Override
@@ -68,6 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // on upgrade drop older tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHECK_HISTORY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EMAILS_SENT);
 
         // create new tables
         onCreate(db);
@@ -114,6 +124,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /*
+     * Adding a Email Sent Record
+     */
+    public long addNewEmailSentRecord(String curDate, int status) {
+
+        Date currentTime = Calendar.getInstance().getTime();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_CREATED_AT, getDateTime());
+        values.put(KEY_SENT_STATUS, status);
+
+        // insert row
+        long location_id = db.insert(TABLE_EMAILS_SENT, null, values);
+        return location_id;
+    }
+
+    /*
+     * getting Email Sent Status
+     * */
+    public boolean getEmailSentStatus(String dateTimeTo) {
+        ArrayList<String> tblEmailsSent = new ArrayList<String>();
+        String selectQuery = "SELECT * FROM " + TABLE_EMAILS_SENT + " WHERE " + KEY_CREATED_AT + " BETWEEN " + "'" + dateTimeTo + " 00:00:00" + "'" + " AND " + "'" + dateTimeTo + " 23:59:00" + "' ORDER BY " + KEY_ID + " ASC;";
+        Log.e(LOG, selectQuery);
+        Log.d("Test", selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        try{
+
+            Cursor c = db.rawQuery(selectQuery, null);
+
+            // looping through all rows and adding to list
+            if (c.moveToFirst()) {
+                do {
+                    // adding to todo list
+                    tblEmailsSent.add(c.getString(c.getColumnIndex(KEY_SENT_STATUS)));
+                } while (c.moveToNext());
+            }
+            if (tblEmailsSent.size() > 0) {
+                if (tblEmailsSent.get(0).equals("1")) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            // true means YES YOU MUST SEND AN EMAIL TO NOTIFY...
+            return true;
+
+        }catch(Exception e){
+            Log.d("Test", e.getMessage());
+            db.execSQL(CREATE_TABLE_EMAILS_SENT);
+            Log.d("Test", "CREATE_TABLE_EMAILS_SENT DONE...");
+        }
+        return false;
+    }
+
+    /*
      * getting all Locations
      * */
     public ArrayList<String> getAllLocations() {
@@ -145,9 +210,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_LOCTIME, wait_minutes);
-
-        //String[] args = new String[]{locationName, wait_minutes+""};
-        //return db.update(TABLE_LOCATIONS, values, "Loc_lati=? AND Loc_longi=?", args);
 
         // updating row
         return db.update(TABLE_LOCATIONS, values, KEY_LOCNAME + " = ?", new String[]{locationName});
@@ -183,7 +245,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String Remark;
         String Guard;
 
-        String selectQuery = "SELECT  * FROM " +  TABLE_CHECK_HISTORY + " ORDER BY " + KEY_ID + " DESC";
+        String selectQuery = "SELECT  * FROM " + TABLE_CHECK_HISTORY + " ORDER BY " + KEY_ID + " DESC";
         Log.e(LOG, selectQuery);
         History hobj;
 
