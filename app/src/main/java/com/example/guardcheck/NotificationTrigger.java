@@ -45,6 +45,7 @@ public class NotificationTrigger {
             Log.d("Test", " SetNotificationTrigger Pending Intent Set..");
             mNotificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             ArrayList<Calendar> notifyHrs = getMessagePopUpTimes();
+            //ArrayList<Calendar> notifyHrs = getMessagePopUpTimes();
 
             for (Calendar calendar : notifyHrs) {
 
@@ -53,12 +54,13 @@ public class NotificationTrigger {
                 //Set up the PendingIntent for the AlarmManager
                 PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(context, 0, notifyIntent, 0);
 
-                long triggerTime = System.currentTimeMillis();
+                long triggerTime = calendar.getTimeInMillis() - System.currentTimeMillis();
+                Log.d("Test", triggerTime+"");
                 long repeatInterval = 10 * 1000; // 10 seconds
 
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-                //alarmManager.set(AlarmManager.RTC_WAKEUP,triggerTime+repeatInterval,notifyPendingIntent);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmManager.INTERVAL_DAY, notifyPendingIntent);
+                //alarmManager.set(AlarmManager.RTC_WAKEUP,triggerTime,notifyPendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime, alarmManager.INTERVAL_DAY, notifyPendingIntent);
             }
         } catch (Exception exception) {
             Toast.makeText(context, "Error :" + exception.getMessage(), Toast.LENGTH_LONG).show();
@@ -80,12 +82,12 @@ public class NotificationTrigger {
                 //Set up the PendingIntent for the AlarmManager
                 PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(context, 0, notifyIntent, 0);
 
-                long triggerTime = System.currentTimeMillis();
+                long triggerTime = calendar.getTimeInMillis() - System.currentTimeMillis();
                 long repeatInterval = 10 * 1000; // 10 seconds
                 long repeatIntervalDay = 24 * 60 * 60 * 1000;
 
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmManager.INTERVAL_DAY, notifyPendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime, alarmManager.INTERVAL_DAY, notifyPendingIntent);
 
             }
         } catch (Exception exception) {
@@ -112,6 +114,32 @@ public class NotificationTrigger {
         calendar.set(Calendar.HOUR_OF_DAY, 03);
         calendar.set(Calendar.MINUTE, 58);
         notifyHrs.add(calendar);
+
+        return notifyHrs;
+    }
+
+    private ArrayList<Integer> getMessagePopUpTimesInMillies() {
+
+        ArrayList<Integer> notifyHrs = new ArrayList<>();
+
+        int x = 17 * 50 * 60 * 1000;
+        notifyHrs.add(x);
+
+        // 21: 58
+        int ninefiftyeight = 21 * 58 * 60 * 1000;
+        notifyHrs.add(ninefiftyeight);
+
+        // 23: 58
+        int twentythreefiftyeight = 23 * 58 * 60 * 1000;
+        notifyHrs.add(twentythreefiftyeight);
+
+        // 01: 58
+        int onefiftyeight = 01 * 58 * 60 * 1000;
+        notifyHrs.add(onefiftyeight);
+
+        // 03: 58
+        int threefiftyeight = 03 * 58 * 60 * 1000;
+        notifyHrs.add(threefiftyeight);
 
         return notifyHrs;
     }

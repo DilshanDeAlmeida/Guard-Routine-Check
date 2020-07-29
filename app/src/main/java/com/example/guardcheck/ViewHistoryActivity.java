@@ -78,7 +78,7 @@ public class ViewHistoryActivity extends AppCompatActivity implements DatePicker
                 if (historyList.isEmpty() == false) {
                     try {
                         ArrayList<String> emailList = new ArrayList<String>();
-                        emailList.add("dilshandealmeida2@gmail.com");
+                        emailList.add("charith@3slk.com");
                         emailList.add("dilshan@3slk.com");
 
                         for(int i=0;i<emailList.size();i++){
