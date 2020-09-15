@@ -54,10 +54,10 @@ public class HomeActivity extends AppCompatActivity {
         //Intent i= new Intent(HomeActivity.this, RSSPullService.class);
         //HomeActivity.this.startService(i);
 
-        NotificationTrigger customNotificationTrigger = new NotificationTrigger(getApplicationContext());
-        customNotificationTrigger.CreateNotificationChannel();
-        customNotificationTrigger.SetNotificationTrigger();
-        customNotificationTrigger.SetReportSendTrigger();
+//        NotificationTrigger customNotificationTrigger = new NotificationTrigger(getApplicationContext());
+//        customNotificationTrigger.CreateNotificationChannel();
+//        customNotificationTrigger.SetNotificationTrigger();
+//        customNotificationTrigger.SetReportSendTrigger();
     }
 
     void initialzeElements() {

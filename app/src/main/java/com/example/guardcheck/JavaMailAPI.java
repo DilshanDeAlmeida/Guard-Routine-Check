@@ -39,60 +39,52 @@ public class JavaMailAPI extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        //progressDialog = ProgressDialog.show(context, "Sending message", "Please wait...", false, false);
-        Toast.makeText(context, "Sending Email...", Toast.LENGTH_LONG).show();
+        progressDialog = ProgressDialog.show(context, "Sending message", "Please wait...", false, false);
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        //progressDialog.dismiss();
-        Toast.makeText(context, "Email Sent", Toast.LENGTH_LONG).show();
+        progressDialog.dismiss();
     }
 
     @Override
     protected Void doInBackground(Void... params) {
+
+        // Using SSL Port 465
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "465");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.socketFactory.port", "465");
+        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        prop.put("mail.smtp.user", Credentials.EMAIL);
+        prop.put("mail.smtp.password", Credentials.PASSWORD);
+
+        // Using TLS Port 587
+//        Properties prop = System.getProperties();
+//        String host = "smtp.gmail.com";
+//        prop.put("mail.smtp.starttls.enable", "true");
+//        prop.put("mail.smtp.host", host);
+//        prop.put("mail.smtp.user", Credentials.EMAIL);
+//        prop.put("mail.smtp.password", Credentials.PASSWORD);
+//        prop.put("mail.smtp.port", "587");
+//        prop.put("mail.smtp.auth", "true");
+
+        Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(Credentials.EMAIL, Credentials.PASSWORD);
+            }
+        });
+
         try {
 
-            Properties props = new Properties();
-
-            // Using Port 465
-            props.put("mail.smtp.host", "smtp.gmail.com");
-            props.put("mail.smtp.port", "465");
-            props.put("mail.smtp.socketFactory.port", "465");
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            props.put("mail.smtp.socketFactory.fallback", "false");
-            props.put("mail.user", Credentials.EMAIL);
-
-            // Using Port 587
-//            props.put("mail.smtp.host", "smtp.gmail.com");
-//            props.put("mail.smtp.port", "587");
-//            props.put("mail.smtp.auth", "true");
-//            props.put("mail.smtp.starttls.enable", "true");
-//            props.put("mail.user", Credentials.EMAIL);
-
-            //mail.3slk.com
-//            props.put("mail.smtp.host", "mail.3slk.com");
-//            props.put("mail.smtp.ssl.trust", "*");
-//            props.put("mail.smtp.port", "587");
-//            props.put("mail.smtp.auth", "true");
-//            props.put("mail.smtp.starttls.enable", "true");
-//            props.put("mail.user", Credentials.EMAIL);
-
-            session = Session.getInstance(props, new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(Credentials.EMAIL, Credentials.PASSWORD);
-                }
-            });
-
-            MimeMessage mm = new MimeMessage(session);
-            mm.setFrom(new InternetAddress(Credentials.EMAIL));
-            mm.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-            mm.setSubject(subject);
-            mm.setText(message);
-
-            Transport.send(mm);
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(Credentials.EMAIL));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject(subject);
+            message.setText(this.message);
+            Transport.send(message);
 
         } catch (MessagingException e) {
             Log.d("Test", e.getMessage());
