@@ -133,6 +133,7 @@ public class SendAutomaticReport extends BroadcastReceiver {
                     ArrayList<String> emailList = new ArrayList<String>();
                     emailList.add("charith@3slk.com");
                     emailList.add("dilshan@3slk.com");
+                    //emailList.add("dilshandealmeida2@gmail.com");
 
                     for (int i = 0; i < emailList.size(); i++) {
 

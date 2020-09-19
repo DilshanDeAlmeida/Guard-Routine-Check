@@ -39,13 +39,15 @@ public class JavaMailAPI extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = ProgressDialog.show(context, "Sending message", "Please wait...", false, false);
+        //progressDialog = ProgressDialog.show(context, "Sending message", "Please wait...", false, false);
+        Toast.makeText(context, "Sending email...", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        progressDialog.dismiss();
+        //progressDialog.dismiss();
+        Toast.makeText(context, "Email Sent!", Toast.LENGTH_LONG).show();
     }
 
     @Override
