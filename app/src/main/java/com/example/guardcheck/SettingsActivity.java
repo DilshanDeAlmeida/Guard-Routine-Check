@@ -63,7 +63,8 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 try {
-                    File sd = Environment.getExternalStorageDirectory();
+                    //File sd = Environment.getExternalStorageDirectory();
+                    File sd = new File(getApplicationContext().getFilesDir(), "mydir");
                     Date currentTime = Calendar.getInstance().getTime();
 
                     if (sd.canWrite()) {
@@ -84,7 +85,11 @@ public class SettingsActivity extends AppCompatActivity {
                             //dbHelper.ClearHistoryFromPhoneDatabase();
 
                             Toast.makeText(getApplicationContext(), "Backup Success", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Database Not Found", Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Can't save to this storage", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Error :" + e.getMessage(), Toast.LENGTH_LONG).show();

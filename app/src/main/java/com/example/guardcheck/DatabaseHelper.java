@@ -149,7 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.e(LOG, selectQuery);
         Log.d("Test", selectQuery);
         SQLiteDatabase db = this.getReadableDatabase();
-        try{
+        try {
 
             Cursor c = db.rawQuery(selectQuery, null);
 
@@ -170,7 +170,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // true means YES YOU MUST SEND AN EMAIL TO NOTIFY...
             return true;
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.d("Test", e.getMessage());
             db.execSQL(CREATE_TABLE_EMAILS_SENT);
             Log.d("Test", "CREATE_TABLE_EMAILS_SENT DONE...");
@@ -289,9 +289,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String Remark;
         String Guard;
 
-        String selectQuery = "SELECT * FROM " + TABLE_CHECK_HISTORY + " WHERE " + KEY_CREATED_AT + " BETWEEN " + "'" + FromDate + " 17:00:00" + "'" + " AND " + "'" + ToDate + " 17:00:00" + "' ORDER BY " + KEY_ID + " ASC;";
+        String selectQuery =
+                "SELECT * FROM " + TABLE_CHECK_HISTORY + " WHERE " + KEY_CREATED_AT + " BETWEEN " + "'"
+                + FromDate + " 17:00:00" + "'" + " AND " + "'" + ToDate + " 17:00:00" + "' ORDER BY " + KEY_ID + " ASC;";
 
-        Log.e(LOG, selectQuery);
+//                "SELECT * FROM " + TABLE_CHECK_HISTORY + " WHERE DATE(" + KEY_CREATED_AT + ") >= " + "'"
+//                + FromDate + " 17:00:00" + "'" + " AND DATE(" + KEY_CREATED_AT + ") <= " + "'" + ToDate + " 17:00:00" + "' ORDER BY " + KEY_ID + " ASC;";
+
+//                "SELECT * FROM " + TABLE_CHECK_HISTORY + " WHERE DATE(" + KEY_CREATED_AT + ") <= " + "'"
+//                + FromDate + "'" + " AND DATE(" + KEY_CREATED_AT + ") >= " + "'" + ToDate + "' ORDER BY " + KEY_ID + " ASC;";
+
+                Log.e(LOG, selectQuery);
         History hobj;
 
         Log.d("Test", selectQuery);

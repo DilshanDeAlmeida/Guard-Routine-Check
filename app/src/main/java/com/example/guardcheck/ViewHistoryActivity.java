@@ -63,11 +63,17 @@ public class ViewHistoryActivity extends AppCompatActivity implements DatePicker
                 Log.d("Test", "Getting guard history data from Database...");
                 historyList = db.getGuardHistory(fromDate, toDate);
 
-                listViewHistory.setAdapter(null);
-                HistoryListAdapter adapter = new HistoryListAdapter(getApplicationContext(), R.layout.adapter_view_layout, historyList);
-                listViewHistory.setAdapter(adapter);
-                CalculateCompletedTrips(historyList);
-                tripStartTimes = GetTripStartTimes(historyList);
+                if (historyList.isEmpty() == false) {
+                    listViewHistory.setAdapter(null);
+                    HistoryListAdapter adapter = new HistoryListAdapter(getApplicationContext(), R.layout.adapter_view_layout, historyList);
+                    listViewHistory.setAdapter(adapter);
+                    CalculateCompletedTrips(historyList);
+                    tripStartTimes = GetTripStartTimes(historyList);
+                }else{
+                    CalculateCompletedTrips(historyList);
+                    listViewHistory.setAdapter(null);
+                    Toast.makeText(getApplicationContext(), "0 Records Found", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -126,9 +132,23 @@ public class ViewHistoryActivity extends AppCompatActivity implements DatePicker
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
-        fromDate = year + "-" + "0" + (month + 1) + "-" + (dayOfMonth - 1);
-        toDate = year + "-" + "0" + (month + 1) + "-" + dayOfMonth;
+        // month counting starts from 0
+        String varMonth, varDay, varYday;
+        month += 1;
+        if (month < 10) {
+            varMonth = "0" + month;
+        } else {
+            varMonth = String.valueOf(month);
+        }
+        if (dayOfMonth < 10) {
+            varDay = "0" + dayOfMonth;
+            varYday = "0" + (dayOfMonth - 1);
+        } else {
+            varDay = String.valueOf(dayOfMonth);
+            varYday = String.valueOf(dayOfMonth - 1);
+        }
+        fromDate = year + "-" + varMonth + "-" + varYday;
+        toDate = year + "-" + varMonth + "-" + varDay;
         btnDatePicker.setText(fromDate + " to " + toDate);
         Log.d("Test", "View log from " + fromDate + " to " + toDate);
     }
